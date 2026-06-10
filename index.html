@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RICH LCD Premium — Technician Approved</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #a8e000;
+      --green-dark: #7ab000;
+      --green-glow: rgba(168,224,0,0.35);
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #161616;
+      --border: rgba(168,224,0,0.15);
+      --text: #f0f0f0;
+      --muted: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+    }
+    .nav-logo span:first-child { color: var(--green); }
+    .nav-logo span:last-child  { color: #c0c0c0; }
+
+    .nav-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--bg);
+      background: var(--green);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 100px 5% 60px;
+    }
+
+    /* animated gradient bg */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 55% at 50% 60%, rgba(100,168,0,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 30% at 20% 80%, rgba(168,224,0,0.08) 0%, transparent 60%),
+                  #0a0a0a;
+      animation: pulse-bg 6s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-bg {
+      from { opacity: 1; }
+      to   { opacity: 0.75; }
+    }
+
+    /* grid lines */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(168,224,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168,224,0,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .hero-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      line-height: 0.85;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .hero-logo .ri {
+      display: block;
+      font-size: clamp(8rem, 20vw, 16rem);
+      color: var(--green);
+      text-shadow: 0 0 60px rgba(168,224,0,0.5), 0 0 120px rgba(168,224,0,0.2);
+      letter-spacing: -0.02em;
+    }
+    .hero-logo .ch {
+      display: block;
+      font-size: clamp(8rem, 20vw, 16rem);
+      color: #c0c0c0;
+      letter-spacing: -0.02em;
+      margin-top: -0.15em;
+    }
+
+    .hero-premium {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.35em;
+      color: var(--bg);
+      background: var(--green);
+      padding: 6px 24px;
+      margin: 16px 0 32px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 460px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: var(--bg);
+      background: var(--green);
+      border: none;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      text-transform: uppercase;
+    }
+    .btn-primary:hover {
+      background: #c2ff00;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(168,224,0,0.4);
+    }
+
+    .btn-outline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: var(--green);
+      background: transparent;
+      border: 1.5px solid var(--green);
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-transform: uppercase;
+    }
+    .btn-outline:hover {
+      background: rgba(168,224,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      overflow: hidden;
+      background: var(--green);
+      padding: 10px 0;
+      white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex;
+      animation: ticker 20s linear infinite;
+    }
+    .ticker-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: var(--bg);
+      text-transform: uppercase;
+      padding: 0 32px;
+    }
+    .ticker-item::before {
+      content: '★';
+      margin-right: 12px;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section { position: relative; z-index: 1; }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      line-height: 0.95;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 100px 5%;
+      background: var(--surface);
+    }
+
+    .features-head {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feat-card {
+      background: var(--surface2);
+      padding: 40px 32px;
+      border: 1px solid rgba(168,224,0,0.08);
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--green);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .feat-card:hover { border-color: var(--border); transform: translateY(-4px); }
+    .feat-card:hover::before { transform: scaleX(1); }
+
+    .feat-icon {
+      width: 52px;
+      height: 52px;
+      border: 1.5px solid var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--green);
+    }
+    .feat-icon svg { width: 24px; height: 24px; }
+
+    .feat-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .feat-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── SPECS ── */
+    .specs {
+      padding: 100px 5%;
+      background: var(--bg);
+    }
+
+    .specs-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .specs-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .specs-visual {
+      position: relative;
+    }
+
+    .phone-mockup {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    .phone-frame {
+      background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+      border: 2px solid rgba(168,224,0,0.2);
+      border-radius: 36px;
+      padding: 16px;
+      box-shadow: 0 0 60px rgba(168,224,0,0.12), 0 40px 80px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .phone-screen {
+      background: linear-gradient(170deg, #0e1a00 0%, #1a3000 40%, #0a0a0a 100%);
+      border-radius: 24px;
+      aspect-ratio: 9/19;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(168,224,0,0.1), transparent 70%);
+    }
+
+    .phone-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      line-height: 0.85;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .phone-logo .ri { font-size: 5rem; color: var(--green); text-shadow: 0 0 30px rgba(168,224,0,0.6); }
+    .phone-logo .ch { font-size: 5rem; color: #c0c0c0; margin-top: -0.1em; }
+
+    .phone-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--bg);
+      background: var(--green);
+      padding: 4px 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* floating chips */
+    .chip {
+      position: absolute;
+      background: rgba(10,10,10,0.9);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      padding: 10px 14px;
+      backdrop-filter: blur(8px);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: #fff;
+      white-space: nowrap;
+      animation: float 3s ease-in-out infinite;
+    }
+    .chip-1 { top: 15%; right: -40px; animation-delay: 0s; }
+    .chip-2 { top: 45%; left: -50px; animation-delay: 1s; }
+    .chip-3 { bottom: 18%; right: -40px; animation-delay: 2s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    @media (max-width: 768px) {
+      .chip { display: none; }
+    }
+
+    .specs-content { }
+
+    .spec-list {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .spec-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .spec-key {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .spec-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+    .spec-val.green { color: var(--green); }
+
+    /* ── TECHNICIAN APPROVED BANNER ── */
+    .approved-banner {
+      padding: 80px 5%;
+      background: var(--green);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .approved-banner::before {
+      content: 'TECHNICIAN APPROVED';
+      position: absolute;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 12vw;
+      color: rgba(0,0,0,0.07);
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .approved-inner { position: relative; z-index: 1; }
+
+    .approved-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 5rem);
+      color: var(--bg);
+      text-transform: uppercase;
+      line-height: 0.95;
+      margin-bottom: 16px;
+    }
+
+    .approved-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: rgba(0,0,0,0.6);
+      text-transform: uppercase;
+    }
+
+    /* ── MODELS ── */
+    .models {
+      padding: 100px 5%;
+      background: var(--surface);
+    }
+
+    .models-head {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .model-card {
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .model-card:hover {
+      border-color: rgba(168,224,0,0.3);
+      background: rgba(168,224,0,0.03);
+    }
+
+    .model-brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .model-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
+    /* ── WHY RICH ── */
+    .why {
+      padding: 100px 5%;
+      background: var(--bg);
+    }
+
+    .why-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .why-head {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .why-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    @media (max-width: 640px) {
+      .why-cols { grid-template-columns: 1fr; }
+    }
+
+    .why-item {
+      background: var(--surface2);
+      padding: 40px;
+      display: flex;
+      gap: 24px;
+      border: 1px solid rgba(255,255,255,0.03);
+      transition: border-color 0.25s;
+    }
+    .why-item:hover { border-color: var(--border); }
+
+    .why-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 3.5rem;
+      color: rgba(168,224,0,0.15);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .why-text h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .why-text p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 5%;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+    }
+    .footer-logo span:first-child { color: var(--green); }
+    .footer-logo span:last-child  { color: #c0c0c0; }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--bg);
+      background: var(--green);
+      padding: 4px 12px;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo"><span>RI</span><span>CH</span></div>
+    <div class="nav-badge">Technician Approved</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">LCD Replacement Screen</div>
+      <div class="hero-logo">
+        <span class="ri">RI</span>
+        <span class="ch">CH</span>
+      </div>
+      <div class="hero-premium">PREMIUM</div>
+      <p class="hero-subtitle">
+        Kualitas display terbaik untuk servis smartphone Anda. Warna akurat, sentuhan responsif, dipercaya oleh teknisi profesional.
+      </p>
+      <div class="hero-cta">
+        <a href="#features" class="btn-primary">Lihat Fitur</a>
+        <a href="#models" class="btn-outline">Cek Kompatibilitas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">Precision Fit</span>
+      <span class="ticker-item">Durable Protection</span>
+      <span class="ticker-item">Accurate Multi-Touch</span>
+      <span class="ticker-item">High Display Color Gamut</span>
+      <span class="ticker-item">Technician Approved</span>
+      <span class="ticker-item">Premium Quality</span>
+      <span class="ticker-item">Precision Fit</span>
+      <span class="ticker-item">Durable Protection</span>
+      <span class="ticker-item">Accurate Multi-Touch</span>
+      <span class="ticker-item">High Display Color Gamut</span>
+      <span class="ticker-item">Technician Approved</span>
+      <span class="ticker-item">Premium Quality</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="features-head reveal">
+      <div class="section-label">Keunggulan</div>
+      <div class="section-title">Dirancang untuk<br><em>Performa Terbaik</em></div>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+          </svg>
+        </div>
+        <div class="feat-title">Precision Fit</div>
+        <p class="feat-desc">Dimensi presisi sesuai spesifikasi pabrik. Pas sempurna tanpa celah atau gesekan berlebih.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="feat-title">Durable Protection</div>
+        <p class="feat-desc">Material premium tahan benturan dan goresan. Didesain untuk ketahanan jangka panjang.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="feat-title">Accurate Multi-Touch</div>
+        <p class="feat-desc">Touchscreen responsif 10 titik sentuh simultan. Akurasi tinggi untuk gaming dan produktivitas.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </div>
+        <div class="feat-title">High Color Gamut</div>
+        <p class="feat-desc">Reproduksi warna akurat dengan gamut luas. Tampilan jernih dan natural seperti layar orisinal.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECS -->
+  <section class="specs" id="specs">
+    <div class="specs-inner">
+      <div class="specs-visual reveal">
+        <div class="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-logo">
+                <div class="ri">RI</div>
+                <div class="ch">CH</div>
+              </div>
+              <div class="phone-badge">PREMIUM</div>
+            </div>
+          </div>
+          <div class="chip chip-1">✓ OEM Quality</div>
+          <div class="chip chip-2">✓ Touch 10-point</div>
+          <div class="chip chip-3">✓ 99% sRGB</div>
+        </div>
+      </div>
+      <div class="specs-content reveal">
+        <div class="section-label">Spesifikasi</div>
+        <div class="section-title">Standar <em>Kualitas</em><br>Terjamin</div>
+        <div class="spec-list">
+          <div class="spec-row">
+            <span class="spec-key">Panel Type</span>
+            <span class="spec-val green">IPS / OLED</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Touch Points</span>
+            <span class="spec-val">10 Simultaneous</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Color Gamut</span>
+            <span class="spec-val green">99% sRGB</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Brightness</span>
+            <span class="spec-val">≥ 500 nits</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Fit Standard</span>
+            <span class="spec-val green">OEM Grade A</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-key">Warranty</span>
+            <span class="spec-val">3 Bulan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROVED BANNER -->
+  <div class="approved-banner reveal">
+    <div class="approved-inner">
+      <div class="approved-title">Technician<br>Approved</div>
+      <div class="approved-sub">Dipercaya oleh ratusan teknisi servis di seluruh Indonesia</div>
+    </div>
+  </div>
+
+  <!-- MODELS -->
+  <section class="models" id="models">
+    <div class="models-head reveal">
+      <div class="section-label">Kompatibilitas</div>
+      <div class="section-title">Tersedia untuk<br><em>Semua Model</em></div>
+    </div>
+    <div class="models-grid">
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 15 Pro Max</div></div>
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 15 Pro</div></div>
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 15</div></div>
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 14 Pro Max</div></div>
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 14 Pro</div></div>
+      <div class="model-card reveal"><div class="model-brand">Apple</div><div class="model-name">iPhone 13 Pro</div></div>
+      <div class="model-card reveal"><div class="model-brand">Samsung</div><div class="model-name">Galaxy S24 Ultra</div></div>
+      <div class="model-card reveal"><div class="model-brand">Samsung</div><div class="model-name">Galaxy S24+</div></div>
+      <div class="model-card reveal"><div class="model-brand">Samsung</div><div class="model-name">Galaxy A55</div></div>
+      <div class="model-card reveal"><div class="model-brand">Samsung</div><div class="model-name">Galaxy A35</div></div>
+      <div class="model-card reveal"><div class="model-brand">Xiaomi</div><div class="model-name">14 Ultra</div></div>
+      <div class="model-card reveal"><div class="model-brand">Xiaomi</div><div class="model-name">Redmi Note 13</div></div>
+      <div class="model-card reveal"><div class="model-brand">OPPO</div><div class="model-name">Find X7 Pro</div></div>
+      <div class="model-card reveal"><div class="model-brand">Vivo</div><div class="model-name">V30 Pro</div></div>
+      <div class="model-card reveal"><div class="model-brand">+ Ratusan</div><div class="model-name">Model Lainnya</div></div>
+    </div>
+  </section>
+
+  <!-- WHY RICH -->
+  <section class="why">
+    <div class="why-inner">
+      <div class="why-head reveal">
+        <div class="section-label">Mengapa RICH</div>
+        <div class="section-title">Bukan Sekadar<br><em>Pengganti Layar</em></div>
+      </div>
+      <div class="why-cols">
+        <div class="why-item reveal">
+          <div class="why-num">01</div>
+          <div class="why-text">
+            <h3>Kualitas Terverifikasi</h3>
+            <p>Setiap unit melalui uji QC ketat sebelum dikemas. Hanya produk yang lolos standar kami yang sampai ke tangan Anda.</p>
+          </div>
+        </div>
+        <div class="why-item reveal">
+          <div class="why-num">02</div>
+          <div class="why-text">
+            <h3>Garansi Resmi</h3>
+            <p>Dapatkan garansi 3 bulan untuk setiap pembelian. Dead pixel, touch failure, atau defect? Kami tanggung.</p>
+          </div>
+        </div>
+        <div class="why-item reveal">
+          <div class="why-num">03</div>
+          <div class="why-text">
+            <h3>Pengiriman Cepat</h3>
+            <p>Stok selalu tersedia, siap kirim hari yang sama. Layanan ekspres tersedia untuk kebutuhan mendesak.</p>
+          </div>
+        </div>
+        <div class="why-item reveal">
+          <div class="why-num">04</div>
+          <div class="why-text">
+            <h3>Harga Kompetitif</h3>
+            <p>Kualitas premium dengan harga yang masuk akal untuk para teknisi dan pelaku usaha servis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><span>RI</span><span>CH</span></div>
+    <div class="footer-copy">© 2024 RICH LCD Premium. All rights reserved.</div>
+    <div class="footer-badge">Technician Approved</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
