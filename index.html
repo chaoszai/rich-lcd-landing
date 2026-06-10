@@ -56,24 +56,15 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .nav-logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 900;
-      font-size: 1.6rem;
-      letter-spacing: 0.04em;
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      filter: drop-shadow(0 0 8px rgba(168,224,0,0.3));
     }
-    .nav-logo span:first-child { color: var(--green); }
-    .nav-logo span:last-child  { color: #c0c0c0; }
 
-    .nav-badge {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      color: var(--bg);
-      background: var(--green);
-      padding: 3px 10px;
-      border-radius: 2px;
+    .nav-badge img {
+      height: 28px;
+      width: auto;
     }
 
     /* ── HERO ── */
@@ -148,31 +139,24 @@
       margin-bottom: 10px;
       position: relative;
     }
-    .hero-logo .ri {
-      display: block;
-      font-size: clamp(8rem, 20vw, 16rem);
-      color: var(--green);
-      text-shadow: 0 0 60px rgba(168,224,0,0.5), 0 0 120px rgba(168,224,0,0.2);
-      letter-spacing: -0.02em;
+    .hero-logo img {
+      width: clamp(220px, 40vw, 480px);
+      height: auto;
+      filter: drop-shadow(0 0 60px rgba(168,224,0,0.4)) drop-shadow(0 0 120px rgba(168,224,0,0.15));
+      animation: logo-glow 3s ease-in-out infinite alternate;
     }
-    .hero-logo .ch {
-      display: block;
-      font-size: clamp(8rem, 20vw, 16rem);
-      color: #c0c0c0;
-      letter-spacing: -0.02em;
-      margin-top: -0.15em;
+    @keyframes logo-glow {
+      from { filter: drop-shadow(0 0 40px rgba(168,224,0,0.35)) drop-shadow(0 0 80px rgba(168,224,0,0.1)); }
+      to   { filter: drop-shadow(0 0 80px rgba(168,224,0,0.6)) drop-shadow(0 0 160px rgba(168,224,0,0.25)); }
     }
 
     .hero-premium {
       display: inline-block;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.35em;
-      color: var(--bg);
-      background: var(--green);
-      padding: 6px 24px;
       margin: 16px 0 32px;
+    }
+    .hero-premium img {
+      height: 44px;
+      width: auto;
     }
 
     .hero-subtitle {
@@ -418,17 +402,15 @@
       position: relative;
       z-index: 1;
     }
-    .phone-logo .ri { font-size: 5rem; color: var(--green); text-shadow: 0 0 30px rgba(168,224,0,0.6); }
-    .phone-logo .ch { font-size: 5rem; color: #c0c0c0; margin-top: -0.1em; }
+    .phone-logo img {
+      width: 120px;
+      height: auto;
+      filter: drop-shadow(0 0 20px rgba(168,224,0,0.5));
+    }
 
-    .phone-badge {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      color: var(--bg);
-      background: var(--green);
-      padding: 4px 16px;
+    .phone-badge img {
+      height: 22px;
+      width: auto;
       position: relative;
       z-index: 1;
     }
@@ -658,14 +640,10 @@
       gap: 16px;
     }
 
-    .footer-logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 900;
-      font-size: 2rem;
-      letter-spacing: 0.04em;
+    .footer-logo img {
+      height: 40px;
+      width: auto;
     }
-    .footer-logo span:first-child { color: var(--green); }
-    .footer-logo span:last-child  { color: #c0c0c0; }
 
     .footer-copy {
       font-size: 0.8rem;
@@ -673,14 +651,9 @@
       letter-spacing: 0.06em;
     }
 
-    .footer-badge {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      color: var(--bg);
-      background: var(--green);
-      padding: 4px 12px;
+    .footer-badge img {
+      height: 28px;
+      width: auto;
     }
 
     /* ── SCROLL REVEAL ── */
@@ -699,8 +672,8 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo"><span>RI</span><span>CH</span></div>
-    <div class="nav-badge">Technician Approved</div>
+    <div class="nav-logo"><img src="assets/logo-bicolor.png" alt="RICH LCD Logo" /></div>
+    <div class="nav-badge"><img src="assets/badge-technician.png" alt="Technician Approved" /></div>
   </nav>
 
   <!-- HERO -->
@@ -710,10 +683,11 @@
     <div class="hero-inner">
       <div class="hero-eyebrow">LCD Replacement Screen</div>
       <div class="hero-logo">
-        <span class="ri">RI</span>
-        <span class="ch">CH</span>
+        <img src="assets/logo-bicolor.png" alt="RICH LCD" />
       </div>
-      <div class="hero-premium">PREMIUM</div>
+      <div class="hero-premium">
+        <img src="assets/badge-technician.png" alt="Technician Approved" />
+      </div>
       <p class="hero-subtitle">
         Kualitas display terbaik untuk servis smartphone Anda. Warna akurat, sentuhan responsif, dipercaya oleh teknisi profesional.
       </p>
@@ -796,10 +770,11 @@
           <div class="phone-frame">
             <div class="phone-screen">
               <div class="phone-logo">
-                <div class="ri">RI</div>
-                <div class="ch">CH</div>
+                <img src="assets/logo-bicolor.png" alt="RICH" />
               </div>
-              <div class="phone-badge">PREMIUM</div>
+              <div class="phone-badge">
+                <img src="assets/badge-approved.png" alt="Technician Approved" />
+              </div>
             </div>
           </div>
           <div class="chip chip-1">✓ OEM Quality</div>
@@ -843,7 +818,7 @@
   <!-- APPROVED BANNER -->
   <div class="approved-banner reveal">
     <div class="approved-inner">
-      <div class="approved-title">Technician<br>Approved</div>
+        <img src="assets/badge-technician.png" alt="Technician Approved" style="height:80px;width:auto;margin-bottom:16px;" />
       <div class="approved-sub">Dipercaya oleh ratusan teknisi servis di seluruh Indonesia</div>
     </div>
   </div>
@@ -915,9 +890,9 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo"><span>RI</span><span>CH</span></div>
+    <div class="footer-logo"><img src="assets/logo-bicolor.png" alt="RICH LCD Logo" /></div>
     <div class="footer-copy">© 2024 RICH LCD Premium. All rights reserved.</div>
-    <div class="footer-badge">Technician Approved</div>
+    <div class="footer-badge"><img src="assets/badge-approved.png" alt="Technician Approved" /></div>
   </footer>
 
   <script>
